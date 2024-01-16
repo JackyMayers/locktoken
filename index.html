@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redimensionar Imagens</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+      font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    input, label, button {
+      margin: 5px;
+    }
+
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #output {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      margin: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Redimensionar Imagens</h1>
+
+  <input type="file" id="imageInput" accept="image/*">
+  
+  <h2>Escolha os tamanhos (formato: Largura x Altura):</h2>
+  
+  <label for="size1">Tamanho 1:</label>
+  <input type="text" id="size1" placeholder="Ex: 1x1" required>
+
+  <label for="size2">Tamanho 2:</label>
+  <input type="text" id="size2" placeholder="Ex: 2x2" required>
+
+  <label for="size3">Tamanho 3:</label>
+  <input type="text" id="size3" placeholder="Ex: 3x3" required>
+
+  <button onclick="redimensionarImagens()">Redimensionar</button>
+  <button onclick="salvarImagensSeparadas()">Salvar Separadamente</button>
+  <button onclick="salvarTodasImagens()">Salvar Todas</button>
+
+  <div id="output"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+
+  <script>
+    var imagensRedimensionadas = [];
+
+    function redimensionarImagens() {
+      var input = document.getElementById('imageInput');
+      var outputDiv = document.getElementById('output');
+
+      // Obter tamanhos escolhidos pelo usuário
+      var size1 = document.getElementById('size1').value.split('x');
+      var size2 = document.getElementById('size2').value.split('x');
+      var size3 = document.getElementById('size3').value.split('x');
+
+      outputDiv.innerHTML = '';
+
+      if (!input.files || input.files.length === 0) {
+        outputDiv.innerHTML = 'Selecione uma imagem.';
+        return;
+      }
+
+      var img = new Image();
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        img.src = e.target.result;
+
+        img.onload = function () {
+          // Redimensionar para Tamanho 1
+          var canvas1 = redimensionarImagem(img, parseInt(size1[0]), parseInt(size1[1]));
+          outputDiv.innerHTML += '<p>Tamanho 1:</p>';
+          outputDiv.appendChild(canvas1);
+
+          // Redimensionar para Tamanho 2
+          var canvas2 = redimensionarImagem(img, parseInt(size2[0]), parseInt(size2[1]));
+          outputDiv.innerHTML += '<p>Tamanho 2:</p>';
+          outputDiv.appendChild(canvas2);
+
+          // Redimensionar para Tamanho 3
+          var canvas3 = redimensionarImagem(img, parseInt(size3[0]), parseInt(size3[1]));
+          outputDiv.innerHTML += '<p>Tamanho 3:</p>';
+          outputDiv.appendChild(canvas3);
+
+          // Armazenar as imagens redimensionadas
+          imagensRedimensionadas = [canvas1.toDataURL(), canvas2.toDataURL(), canvas3.toDataURL()];
+        };
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+
+    function redimensionarImagem(img, width, height) {
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
+      canvas.width = width;
+      canvas.height = height;
+      ctx.drawImage(img, 0, 0, width, height);
+      var preview = document.createElement('img');
+      preview.src = canvas.toDataURL();
+      preview.style.maxWidth = '100%';
+      preview.style.height = 'auto';
+      preview.style.margin = '10px';
+      preview.style.border = '1px solid #ddd';
+      preview.style.borderRadius = '5px';
+      preview.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+      return preview;
+    }
+
+    function salvarImagemSeparada(index) {
+      if (imagensRedimensionadas.length === 0) {
+        alert('Redimensione as imagens antes de salvar.');
+        return;
+      }
+
+      var link = document.createElement('a');
+      link.href = imagensRedimensionadas[index];
+      link.download = `imagem_redimensionada_${index + 1}.png`;
+      link.click();
+    }
+
+    function salvarImagensSeparadas() {
+      for (var i = 0; i < imagensRedimensionadas.length; i++) {
+        salvarImagemSeparada(i);
+      }
+    }
+
+    function salvarTodasImagens() {
+      if (imagensRedimensionadas.length === 0) {
+        alert('Redimensione as imagens antes de salvar.');
+        return;
+      }
+
+      // Criar um link para download de todas as imagens
+      var zip = new JSZip();
+      for (var i = 0; i < imagensRedimensionadas.length; i++) {
+        zip.file(`imagem_redimensionada_${i + 1}.png`, imagensRedimensionadas[i].split(',')[1], { base64: true });
+      }
+
+      zip.generateAsync({ type: 'blob' }).then(function (content) {
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = 'todas_imagens_redimensionadas.zip';
+        link.click();
+      });
+    }
+  </script>
+
+</body>
+</html>
