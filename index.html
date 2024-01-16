@@ -89,7 +89,7 @@
       var input = document.getElementById('imageInput');
       var outputDiv = document.getElementById('output');
 
-      // Obter tamanhos escolhidos pelo usuário
+      
       var size1 = document.getElementById('size1').value.split('x');
       var size2 = document.getElementById('size2').value.split('x');
       var size3 = document.getElementById('size3').value.split('x');
@@ -108,22 +108,22 @@
         img.src = e.target.result;
 
         img.onload = function () {
-          // Redimensionar para Tamanho 1
+        
           var canvas1 = redimensionarImagem(img, parseInt(size1[0]), parseInt(size1[1]));
           outputDiv.innerHTML += '<p>Tamanho 1:</p>';
           outputDiv.appendChild(canvas1);
 
-          // Redimensionar para Tamanho 2
+          2
           var canvas2 = redimensionarImagem(img, parseInt(size2[0]), parseInt(size2[1]));
           outputDiv.innerHTML += '<p>Tamanho 2:</p>';
           outputDiv.appendChild(canvas2);
 
-          // Redimensionar para Tamanho 3
+          
           var canvas3 = redimensionarImagem(img, parseInt(size3[0]), parseInt(size3[1]));
           outputDiv.innerHTML += '<p>Tamanho 3:</p>';
           outputDiv.appendChild(canvas3);
 
-          // Armazenar as imagens redimensionadas
+         
           imagensRedimensionadas = [canvas1.toDataURL(), canvas2.toDataURL(), canvas3.toDataURL()];
         };
       };
@@ -172,7 +172,7 @@
         return;
       }
 
-      // Criar um link para download de todas as imagens
+      
       var zip = new JSZip();
       for (var i = 0; i < imagensRedimensionadas.length; i++) {
         zip.file(`imagem_redimensionada_${i + 1}.png`, imagensRedimensionadas[i].split(',')[1], { base64: true });
