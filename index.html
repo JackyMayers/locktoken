@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<link rel="icon" href="https://i.postimg.cc/MG7qzW4x/emote.png" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Lockpick</title>
+    <title>Calculadora de Produção</title>
     <style>
         body {
             background-color: #121212;
@@ -13,17 +12,21 @@
             text-align: center;
         }
         .container {
-            max-width: 400px;
+            max-width: 450px;
             margin: 20px auto;
             padding: 20px;
             background-color: #1e1e1e;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
         }
+        .input-group {
+            margin: 15px 0;
+            text-align: left;
+        }
         input {
             width: 100%;
-            padding: 10px;
-            margin-top: 10px;
+            padding: 8px;
+            margin-top: 5px;
             background-color: #222;
             border: 1px solid #444;
             color: white;
@@ -33,6 +36,24 @@
             margin-top: 20px;
             font-size: 18px;
         }
+        .titulo {
+            font-size: 20px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+            text-align: center;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        .secundario {
+            color: #FFD700;
+        }
+        .primario {
+            color: #00BFFF;
+        }
     </style>
 </head>
 <body>
@@ -40,52 +61,77 @@
 <div class="container">
     <h2>Calculadora de Produção</h2>
 
-    <label for="quantidadeLockpick">Quantidade de Lockpicks:</label>
-    <input type="number" id="quantidadeLockpick" min="0" value="0" oninput="calcular()">
+    <div class="input-group">
+        <label for="quantidadeLockpick">Quantidade de Lockpicks:</label>
+        <input type="number" id="quantidadeLockpick" min="0" value="0" oninput="calcular()">
+    </div>
 
-    <label for="quantidadeToken">Quantidade de Tokens de Acesso:</label>
-    <input type="number" id="quantidadeToken" min="0" value="0" oninput="calcular()">
+    <div class="input-group">
+        <label for="quantidadeToken">Quantidade de Tokens de Acesso:</label>
+        <input type="number" id="quantidadeToken" min="0" value="0" oninput="calcular()">
+    </div>
 
-    <label for="valorLockpick">Valor de Venda por Lockpick ($):</label>
-    <input type="number" id="valorLockpick" min="0" value="0" oninput="calcular()">
-
-    <label for="valorToken">Valor de Venda por Token de Acesso ($):</label>
-    <input type="number" id="valorToken" min="0" value="0" oninput="calcular()">
+    <div class="input-group">
+        <label for="valorUnico">Valor de Venda (por unidade):</label>
+        <input type="number" id="valorUnico" min="0" value="0" oninput="calcular()">
+    </div>
 
     <div class="resultado">
-        <h3>Materiais Necessários:</h3>
-        <p>Borracha: <span id="borracha">0</span></p>
-        <p>Plástico: <span id="plastico">0</span></p>
-        <p>Cobre: <span id="cobre">0</span></p>
-        <p>Alumínio: <span id="aluminio">0</span></p>
-        <p>Vidro: <span id="vidro">0</span></p>
+        <div class="titulo">Materiais Secundários</div>
+        <div class="row"><span class="secundario">🔸 Borracha:</span> <span id="borracha">0</span></div>
+        <div class="row"><span class="secundario">🔸 Plástico:</span> <span id="plastico">0</span></div>
+        <div class="row"><span class="secundario">🔸 Cobre:</span> <span id="cobre">0</span></div>
+        <div class="row"><span class="secundario">🔸 Alumínio:</span> <span id="aluminio">0</span></div>
+        <div class="row"><span class="secundario">🔸 Vidro:</span> <span id="vidro">0</span></div>
 
-        <h3>Lucro Total:</h3>
+        <div class="titulo">Materiais Primários</div>
+        <div class="row"><span class="primario">🔹 Elásticos (p/ Borracha):</span> <span id="elastico">0</span></div>
+        <div class="row"><span class="primario">🔹 Garrafas Plásticas (p/ Plástico):</span> <span id="garrafaPlastica">0</span></div>
+        <div class="row"><span class="primario">🔹 Pilhas (p/ Cobre):</span> <span id="pilha">0</span></div>
+        <div class="row"><span class="primario">🔹 Latas (p/ Alumínio):</span> <span id="lata">0</span></div>
+        <div class="row"><span class="primario">🔹 Garrafas de Vidro (p/ Vidro):</span> <span id="garrafaVidro">0</span></div>
+
+        <div class="titulo">Lucro Total</div>
         <p>$ <span id="lucroTotal">0</span></p>
     </div>
 </div>
- <footer>
-        <img src="https://i.postimg.cc/WzSNyqxY/Jacky-Confuso.png" alt="Placeholder Image">
-        <p>Direitos Reservados © 2024 <a href="https://jackymayers.github.io/" target="_blank">Jacky Mayers</a>.</p>
-    </footer>
 
 <script>
     function calcular() {
         let qtdLockpick = parseInt(document.getElementById("quantidadeLockpick").value) || 0;
         let qtdToken = parseInt(document.getElementById("quantidadeToken").value) || 0;
 
-        let valorLockpick = parseFloat(document.getElementById("valorLockpick").value) || 0;
-        let valorToken = parseFloat(document.getElementById("valorToken").value) || 0;
+        let valorUnico = parseFloat(document.getElementById("valorUnico").value) || 0;
 
-        // Cálculo dos materiais necessários
-        document.getElementById("borracha").innerText = qtdLockpick * 4;
-        document.getElementById("plastico").innerText = (qtdLockpick * 4) + (qtdToken * 5);
-        document.getElementById("cobre").innerText = (qtdLockpick * 5) + (qtdToken * 4);
-        document.getElementById("aluminio").innerText = (qtdLockpick * 5) + (qtdToken * 4);
-        document.getElementById("vidro").innerText = qtdLockpick * 4;
+        // Cálculo dos materiais secundários
+        let borracha = qtdLockpick * 4;
+        let plastico = (qtdLockpick * 4) + (qtdToken * 5);
+        let cobre = (qtdLockpick * 5) + (qtdToken * 4);
+        let aluminio = (qtdLockpick * 5) + (qtdToken * 4);
+        let vidro = qtdLockpick * 4;
+
+        // Cálculo dos materiais primários necessários para obter os secundários
+        let elastico = Math.ceil(borracha / 3);
+        let garrafaPlastica = Math.ceil(plastico / 3);
+        let pilha = Math.ceil(cobre / 3);
+        let lata = Math.ceil(aluminio / 3);
+        let garrafaVidro = Math.ceil(vidro / 3);
+
+        // Atualizar valores na tela
+        document.getElementById("borracha").innerText = borracha;
+        document.getElementById("plastico").innerText = plastico;
+        document.getElementById("cobre").innerText = cobre;
+        document.getElementById("aluminio").innerText = aluminio;
+        document.getElementById("vidro").innerText = vidro;
+
+        document.getElementById("elastico").innerText = elastico;
+        document.getElementById("garrafaPlastica").innerText = garrafaPlastica;
+        document.getElementById("pilha").innerText = pilha;
+        document.getElementById("lata").innerText = lata;
+        document.getElementById("garrafaVidro").innerText = garrafaVidro;
 
         // Cálculo do lucro total
-        let lucroTotal = (qtdLockpick * valorLockpick) + (qtdToken * valorToken);
+        let lucroTotal = (qtdLockpick + qtdToken) * valorUnico;
         document.getElementById("lucroTotal").innerText = lucroTotal.toFixed(2);
     }
 </script>
