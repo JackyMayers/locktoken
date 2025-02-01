@@ -1,181 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Redimensionar Imagens</title>
-  <style>
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      height: 100vh;
-      margin: 0;
-      background-color: #f4f4f4;
-      font-family: 'Arial', sans-serif;
-    }
-
-    h1 {
-      color: #333;
-    }
-
-    input, label, button {
-      margin: 5px;
-    }
-
-    input, button {
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    button {
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    #output {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-      margin: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-  </style>
+<link rel="icon" href="https://i.postimg.cc/MG7qzW4x/emote.png" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Produção</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 5px;
+        }
+        .resultado {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Redimensionar Imagens</h1>
+<div class="container">
+    <h2>Calculadora de Produção</h2>
 
-  <input type="file" id="imageInput" accept="image/*">
-  
-  <h2>Escolha os tamanhos (formato: Largura x Altura):</h2>
-  
-  <label for="size1">Tamanho 1:</label>
-  <input type="text" id="size1" placeholder="Ex: 1x1" required>
+    <label for="quantidadeLockpick">Quantidade de Lockpicks:</label>
+    <input type="number" id="quantidadeLockpick" min="0" value="0" oninput="calcular()">
 
-  <label for="size2">Tamanho 2:</label>
-  <input type="text" id="size2" placeholder="Ex: 2x2" required>
+    <label for="quantidadeToken">Quantidade de Tokens de Acesso:</label>
+    <input type="number" id="quantidadeToken" min="0" value="0" oninput="calcular()">
 
-  <label for="size3">Tamanho 3:</label>
-  <input type="text" id="size3" placeholder="Ex: 3x3" required>
+    <label for="valorLockpick">Valor de Venda por Lockpick ($):</label>
+    <input type="number" id="valorLockpick" min="0" value="0" oninput="calcular()">
 
-  <button onclick="redimensionarImagens()">Redimensionar</button>
-  <button onclick="salvarImagensSeparadas()">Salvar Separadamente</button>
-  <button onclick="salvarTodasImagens()">Salvar Todas</button>
+    <label for="valorToken">Valor de Venda por Token de Acesso ($):</label>
+    <input type="number" id="valorToken" min="0" value="0" oninput="calcular()">
 
-  <div id="output"></div>
+    <div class="resultado">
+        <h3>Materiais Necessários:</h3>
+        <p>Borracha: <span id="borracha">0</span></p>
+        <p>Plástico: <span id="plastico">0</span></p>
+        <p>Cobre: <span id="cobre">0</span></p>
+        <p>Alumínio: <span id="aluminio">0</span></p>
+        <p>Vidro: <span id="vidro">0</span></p>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+        <h3>Lucro Total:</h3>
+        <p>$ <span id="lucroTotal">0</span></p>
+    </div>
+</div>
+ <footer>
+        <img src="https://i.postimg.cc/WzSNyqxY/Jacky-Confuso.png" alt="Placeholder Image">
+        <p>Direitos Reservados © 2024 <a href="https://jackymayers.github.io/" target="_blank">Jacky Mayers</a>.</p>
+    </footer>
 
-  <script>
-    var imagensRedimensionadas = [];
+<script>
+    function calcular() {
+        let qtdLockpick = parseInt(document.getElementById("quantidadeLockpick").value) || 0;
+        let qtdToken = parseInt(document.getElementById("quantidadeToken").value) || 0;
 
-    function redimensionarImagens() {
-      var input = document.getElementById('imageInput');
-      var outputDiv = document.getElementById('output');
+        let valorLockpick = parseFloat(document.getElementById("valorLockpick").value) || 0;
+        let valorToken = parseFloat(document.getElementById("valorToken").value) || 0;
 
-      var size1 = document.getElementById('size1').value.split('x');
-      var size2 = document.getElementById('size2').value.split('x');
-      var size3 = document.getElementById('size3').value.split('x');
+        // Cálculo dos materiais necessários
+        document.getElementById("borracha").innerText = qtdLockpick * 4;
+        document.getElementById("plastico").innerText = (qtdLockpick * 4) + (qtdToken * 5);
+        document.getElementById("cobre").innerText = (qtdLockpick * 5) + (qtdToken * 4);
+        document.getElementById("aluminio").innerText = (qtdLockpick * 5) + (qtdToken * 4);
+        document.getElementById("vidro").innerText = qtdLockpick * 4;
 
-      outputDiv.innerHTML = '';
-
-      if (!input.files || input.files.length === 0) {
-        outputDiv.innerHTML = 'Selecione uma imagem.';
-        return;
-      }
-
-      var img = new Image();
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        img.src = e.target.result;
-
-        img.onload = function () {
-          var canvas1 = redimensionarImagem(img, parseInt(size1[0]), parseInt(size1[1]));
-          outputDiv.innerHTML += '<p>Tamanho 1:</p>';
-          outputDiv.appendChild(canvas1);
-
-          var canvas2 = redimensionarImagem(img, parseInt(size2[0]), parseInt(size2[1]));
-          outputDiv.innerHTML += '<p>Tamanho 2:</p>';
-          outputDiv.appendChild(canvas2);
-
-          var canvas3 = redimensionarImagem(img, parseInt(size3[0]), parseInt(size3[1]));
-          outputDiv.innerHTML += '<p>Tamanho 3:</p>';
-          outputDiv.appendChild(canvas3);
-
-          imagensRedimensionadas = [
-            canvas1.toDataURL('image/png'),
-            canvas2.toDataURL('image/png'),
-            canvas3.toDataURL('image/png')
-          ];
-        };
-      };
-
-      reader.readAsDataURL(input.files[0]);
+        // Cálculo do lucro total
+        let lucroTotal = (qtdLockpick * valorLockpick) + (qtdToken * valorToken);
+        document.getElementById("lucroTotal").innerText = lucroTotal.toFixed(2);
     }
-
-    function redimensionarImagem(img, width, height) {
-      var canvas = document.createElement('canvas');
-      var ctx = canvas.getContext('2d');
-      canvas.width = width;
-      canvas.height = height;
-      ctx.drawImage(img, 0, 0, width, height);
-      return canvas;
-    }
-
-    function salvarImagemSeparada(index) {
-      if (imagensRedimensionadas.length === 0) {
-        alert('Redimensione as imagens antes de salvar.');
-        return;
-      }
-
-      var link = document.createElement('a');
-      link.href = imagensRedimensionadas[index];
-      link.download = `imagem_redimensionada_${index + 1}.png`;
-      link.click();
-    }
-
-    function salvarImagensSeparadas() {
-      for (var i = 0; i < imagensRedimensionadas.length; i++) {
-        salvarImagemSeparada(i);
-      }
-    }
-
-    function salvarTodasImagens() {
-      if (imagensRedimensionadas.length === 0) {
-        alert('Redimensione as imagens antes de salvar.');
-        return;
-      }
-
-      var zip = new JSZip();
-      for (var i = 0; i < imagensRedimensionadas.length; i++) {
-        zip.file(`imagem_redimensionada_${i + 1}.png`, imagensRedimensionadas[i].split(',')[1], { base64: true });
-      }
-
-      zip.generateAsync({ type: 'blob' }).then(function (content) {
-        var link = document.createElement('a');
-        link.href = URL.createObjectURL(content);
-        link.download = 'todas_imagens_redimensionadas.zip';
-        link.click();
-      });
-    }
-  </script>
+</script>
 
 </body>
 </html>
