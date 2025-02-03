@@ -11,6 +11,8 @@
             color: white;
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
         .container {
             max-width: 450px;
@@ -54,6 +56,26 @@
         }
         .primario {
             color: #00BFFF;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 14px;
+        }
+        footer img {
+            width: 50px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 90%;
+            }
+            .resultado {
+                font-size: 16px;
+            }
+            .titulo {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
@@ -105,7 +127,6 @@
     function calcular() {
         let qtdLockpick = parseInt(document.getElementById("quantidadeLockpick").value) || 0;
         let qtdToken = parseInt(document.getElementById("quantidadeToken").value) || 0;
-
         let valorUnico = parseFloat(document.getElementById("valorUnico").value) || 0;
 
         // Cálculo dos materiais secundários
@@ -135,9 +156,10 @@
         document.getElementById("lata").innerText = lata;
         document.getElementById("garrafaVidro").innerText = garrafaVidro;
 
-        // Cálculo do lucro total
+        // Cálculo do lucro total e formatar o valor
         let lucroTotal = (qtdLockpick + qtdToken) * valorUnico;
-        document.getElementById("lucroTotal").innerText = lucroTotal.toFixed(2);
+        let lucroTotalFormatado = new Intl.NumberFormat('pt-BR').format(lucroTotal.toFixed(2));
+        document.getElementById("lucroTotal").innerText = lucroTotalFormatado;
     }
 </script>
 
